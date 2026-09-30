@@ -3,16 +3,10 @@ import { useState, type ReactNode } from 'react';
 import NewProject from './components/NewProject';
 import NoProjectSelected from './components/NoProjetSelected';
 import ProjectsSidebar from './components/ProjectSidebar';
-
-type Project = {
-  id: string;
-  title: string;
-  description: string;
-  dueDate: string;
-};
+import type { Project, ProjectData } from './types';
 
 type ProjectsState = {
-  selectedProjectId: string | null | undefined;
+  selectedProjectId: number | null | undefined;
   projects: Project[];
 };
 
@@ -31,17 +25,47 @@ function App() {
     });
   }
 
+  function handleCancelAddProject() {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: undefined,
+      };
+    });
+  }
+
+  function handleAddProject(projectData: ProjectData) {
+    setProjectsState((prevState) => {
+      const projectId = Math.random();
+      const newProject: Project = {
+        ...projectData,
+        id: projectId,
+      };
+
+      return {
+        ...prevState,
+        selectedProjectId: undefined,
+        projects: [...prevState.projects, newProject],
+      };
+    });
+  }
+
   let content: ReactNode;
 
   if (projectsState.selectedProjectId === null) {
-    content = <NewProject />;
+    content = (
+      <NewProject onAdd={handleAddProject} onCancel={handleCancelAddProject} />
+    );
   } else if (projectsState.selectedProjectId === undefined) {
     content = <NoProjectSelected onStartAddProject={handleStartAddProject} />;
   }
 
   return (
     <main className="h-screen my-8 flex gap-8">
-      <ProjectsSidebar onStartAddProject={handleStartAddProject} />
+      <ProjectsSidebar
+        onStartAddProject={handleStartAddProject}
+        projects={projectsState.projects}
+      />
       {content}
     </main>
   );
