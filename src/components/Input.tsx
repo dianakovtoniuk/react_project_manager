@@ -1,4 +1,8 @@
-import { forwardRef, type ComponentPropsWithoutRef, type ForwardedRef } from 'react';
+import {
+  forwardRef,
+  type ComponentPropsWithoutRef,
+  type ForwardedRef,
+} from 'react';
 
 type InputProps = { label: string } & (
   | ({ textarea?: false } & ComponentPropsWithoutRef<'input'>)
