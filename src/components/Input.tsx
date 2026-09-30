@@ -1,6 +1,11 @@
+import type { ComponentPropsWithoutRef } from 'react';
 
+type InputProps = { label: string } & (
+  | ({ textarea?: false } & ComponentPropsWithoutRef<'input'>)
+  | ({ textarea: true } & ComponentPropsWithoutRef<'textarea'>)
+);
 
-export default function Input({ label, textarea, ...props } : any) {
+export default function Input({ label, textarea, ...props }: InputProps) {
   const classes =
     'w-full p-1 border-b-2 rounded-sm border-stone-300 bg-stone-200 text-stone-600 focus:outline-none focus:border-stone-600';
 
@@ -10,9 +15,15 @@ export default function Input({ label, textarea, ...props } : any) {
         {label}
       </label>
       {textarea ? (
-        <textarea className={classes} {...props} />
+        <textarea
+          className={classes}
+          {...(props as ComponentPropsWithoutRef<'textarea'>)}
+        />
       ) : (
-        <input className={classes} {...props} />
+        <input
+          className={classes}
+          {...(props as ComponentPropsWithoutRef<'input'>)}
+        />
       )}
     </p>
   );
