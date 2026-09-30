@@ -1,13 +1,20 @@
-import type { Project } from '../types';
+import Tasks from './Tasks';
+import type { Project, Task } from '../types';
 
 type SelectedProjectProps = {
   project: Project;
+  tasks: Task[];
   onDelete: () => void;
+  onAddTask: (text: string) => void;
+  onDeleteTask: (id: number) => void;
 };
 
 export default function SelectedProject({
   project,
   onDelete,
+  onAddTask,
+  onDeleteTask,
+  tasks,
 }: SelectedProjectProps) {
   const formattedDate = new Date(project.dueDate).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -34,7 +41,7 @@ export default function SelectedProject({
           {project.description}
         </p>
       </header>
-      TASKS
+      <Tasks onAdd={onAddTask} onDelete={onDeleteTask} tasks={tasks} />
     </div>
   );
 }
